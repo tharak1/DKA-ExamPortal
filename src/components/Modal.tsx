@@ -2,6 +2,8 @@
 import React, { Fragment } from 'react';
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import { Questions } from '../ExamModel';
+import { useNavigate } from 'react-router-dom';
+import { UserModel } from '../UserModel';
 
 
 
@@ -11,11 +13,15 @@ interface ModalProps {
   totalQuestions:number;
   answeredQuestions:number;
   answers:Questions[]
+  user:UserModel;
+  QpId:string;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose ,answeredQuestions,totalQuestions,answers}) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose ,answeredQuestions,totalQuestions,answers,user,QpId}) => {
+  const navigate = useNavigate();
     const getMarks = () => {
         console.log(answers);
+        navigate('/results', { state: { answers: answers,QpId:QpId,User: user}, replace: true });
     }
 
   return (

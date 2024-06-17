@@ -10,6 +10,7 @@ import { IoArrowForward } from "react-icons/io5";
 import { IoArrowBack } from "react-icons/io5";
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase_config';
+import { UserModel } from './UserModel';
 
 const WriteExamScreen: React.FC = () => {
   const location = useLocation();
@@ -22,7 +23,7 @@ const WriteExamScreen: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [answered, setAnswered] = useState<number>(0);
   const [modal, setModal] = useState<boolean>(false);
-
+  const [user,setUser] = useState<UserModel>();
   const openModal = () => setModal(true);
   const closeModal = () => setModal(false);
 
@@ -32,6 +33,11 @@ const WriteExamScreen: React.FC = () => {
 
   const getQP = async() =>{
     const queryParams = new URLSearchParams(location.search);  
+    const encodedUserData = queryParams.get('user');
+    const decodedUserData = decodeURIComponent(encodedUserData!);
+    const userDataObject = JSON.parse(decodedUserData) as UserModel;
+    setUser(userDataObject);
+
     const id = queryParams.get('id');
     const x = await getDoc(doc(db,"Question-Paper",id!));
     setFinalObj(x.data() as QuestionPaper);
@@ -107,6 +113,10 @@ const WriteExamScreen: React.FC = () => {
     }
   };
 
+  const handleTimerFinish = () => {
+    navigate('/results', { state: { answers: processedQuestions,QpId:finalObj?.id,User: user}, replace: true });
+  }
+
   return (
     <>
       {loading ? (
@@ -119,11 +129,12 @@ const WriteExamScreen: React.FC = () => {
             <div className="flex justify-around items-center">
               <h1 className="m-5">Duration: {finalObj?.duration} min</h1>
               <div className="mr-5">
-                <Timer duration={parseInt(finalObj?.duration || '0') * 60} />
+              <Timer duration={parseInt(finalObj?.duration || '0') * 60}  onTimerFinish={handleTimerFinish}/>
+
               </div>
-              <div className="flex flex-col">
-                <h1>Sai Tharak Reddy</h1>
-                <p>id: 5200859</p>
+              <div className="flex flex-col items-end">
+                <h1>{user?.name}</h1>
+                <p>id: {user?.id}</p>
               </div>
             </div>
           </div>
@@ -225,7 +236,7 @@ const WriteExamScreen: React.FC = () => {
             )
           }
 
-          <Modal isOpen={modal} onClose={closeModal} totalQuestions={processedQuestions.length} answeredQuestions={answered} answers={processedQuestions}/>
+          <Modal isOpen={modal} onClose={closeModal} totalQuestions={processedQuestions.length} answeredQuestions={answered} answers={processedQuestions} user={user!} QpId={finalObj?.id!}/>
         </div>
       )}
     </>
