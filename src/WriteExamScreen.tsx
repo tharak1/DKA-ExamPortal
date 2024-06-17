@@ -11,6 +11,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase_config';
 import { UserModel } from './UserModel';
+import AnotherModal from './components/AnotherModal';
 
 const WriteExamScreen: React.FC = () => {
   const location = useLocation();
@@ -114,7 +115,11 @@ const WriteExamScreen: React.FC = () => {
   };
 
   const handleTimerFinish = () => {
-    navigate('/results', { state: { answers: processedQuestions,QpId:finalObj?.id,User: user}, replace: true });
+    if(finalObj?.examType==='upload question Paper'){
+      navigate('/upload_answers_screen', { state: {QpId:finalObj?.id,User: user}, replace: true })
+    }else{
+      navigate('/results', { state: { answers: processedQuestions,QpId:finalObj?.id,User: user}, replace: true });
+    }
   }
 
   return (
@@ -132,11 +137,21 @@ const WriteExamScreen: React.FC = () => {
               <Timer duration={parseInt(finalObj?.duration || '0') * 60}  onTimerFinish={handleTimerFinish}/>
 
               </div>
-              <div className="flex flex-col items-end">
+              <div className="flex flex-col items-end mr-3">
                 <h1>{user?.name}</h1>
                 <p>id: {user?.id}</p>
               </div>
+              {
+              finalObj?.examType==='upload question Paper' &&(
+
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onClick={openModal}>
+                  Submit
+                </button>
+              
+              )
+            }
             </div>
+
           </div>
           {/* Navbar */}
 
@@ -144,15 +159,9 @@ const WriteExamScreen: React.FC = () => {
           {
             finalObj?.examType==='upload question Paper' ?(
               <>
-              <div className="p-8 w-full col-span-4 row-start-2 row-span-6 overflow-auto bg-white">
+              <div className="p-8 w-full col-span-4 row-start-2 row-span-7 overflow-auto bg-white">
                 <QuestionPaperDisplay QuestionPapers={finalObj.questionsImages!}/>
               </div>
-              <div className="bg-slate-50 col-span-4 row-span-1 row-start-8 flex justify-center items-center w-full">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onClick={()=>{navigate('/admin/upload-answers-screen')}}>
-                  Submit
-                </button>
-              </div>
-
               </>
             ):(
               <>
@@ -235,8 +244,15 @@ const WriteExamScreen: React.FC = () => {
               </>
             )
           }
+          {
+            finalObj?.examType==='upload question Paper' ?(
+              <AnotherModal isOpen={modal} onClose={closeModal} user={user!} QpId={finalObj?.id!}/>
+            ):
+            (
+              <Modal isOpen={modal} onClose={closeModal} totalQuestions={processedQuestions.length} answeredQuestions={answered} answers={processedQuestions} user={user!} QpId={finalObj?.id!}/>
+            )
+          }
 
-          <Modal isOpen={modal} onClose={closeModal} totalQuestions={processedQuestions.length} answeredQuestions={answered} answers={processedQuestions} user={user!} QpId={finalObj?.id!}/>
         </div>
       )}
     </>

@@ -6,17 +6,26 @@ interface TimerProps {
 }
 
 const Timer: React.FC<TimerProps> = ({ duration, onTimerFinish }) => {
-    const [seconds, setSeconds] = useState(duration);
+    const [seconds, setSeconds] = useState(() => {
+        // Retrieve the saved time from localStorage, or use the initial duration
+        const savedTime = localStorage.getItem('remainingTime');
+        return savedTime ? parseInt(savedTime, 10) : duration;
+    });
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
 
         if (seconds > 0) {
             interval = setInterval(() => {
-                setSeconds((prevSeconds) => prevSeconds - 1);
+                setSeconds((prevSeconds) => {
+                    const newSeconds = prevSeconds - 1;
+                    localStorage.setItem('remainingTime', newSeconds.toString());
+                    return newSeconds;
+                });
             }, 1000);
         } else {
             onTimerFinish(); // Execute the callback when timer finishes
+            localStorage.removeItem('remainingTime'); // Clear the saved time
         }
 
         return () => {
