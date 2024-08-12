@@ -27,6 +27,7 @@ interface MyCourseModal{
     courseSession: string;
     branch: string;
     endDate:string;
+    onlineExamExempt?:boolean;
 }
 
 export type {CourseModel,PerformanceModel,MyCourseModal};

@@ -11,12 +11,13 @@ interface AnotherModalProps {
   onClose: () => void;
   user:UserModel;
   QpId:string;
+  courseName:string;
 }
 
-const AnotherModal: React.FC<AnotherModalProps> = ({ isOpen, onClose ,user,QpId}) => {
+const AnotherModal: React.FC<AnotherModalProps> = ({ isOpen, onClose ,user,QpId,courseName}) => {
   const navigate = useNavigate();
     const getMarks = () => {
-        navigate('/upload_answers_screen', { state: {QpId:QpId,User: user}, replace: true })
+        navigate('/upload_answers_screen', { state: {QpId:QpId,User: user,courseName:courseName}, replace: true })
     }
 
   return (

@@ -248,7 +248,7 @@ const WriteExamScreen: React.FC = () => {
           }
           {
             finalObj?.examType==='upload question Paper' ?(
-              <AnotherModal isOpen={modal} onClose={closeModal} user={user!} QpId={finalObj?.id!}/>
+              <AnotherModal isOpen={modal} onClose={closeModal} user={user!} QpId={finalObj?.id!} courseName = {finalObj?.course}/>
             ):
             (
               <Modal isOpen={modal} onClose={closeModal} totalQuestions={processedQuestions.length} answeredQuestions={answered} answers={processedQuestions} user={user!} QpId={finalObj?.id!}/>

@@ -3,18 +3,19 @@ import { ImagePreview } from './ExamModel';
 import uploadImage from './UploadImage';
 import { UserModel } from './UserModel';
 import { useLocation } from 'react-router-dom';
-import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from './firebase_config';
 
 interface ResultsScreenProps {
   QpId: string;
   User: UserModel;
+  courseName: string;
 }
 
 
 const UploadAnsScreen:React.FC = () => {
   const location = useLocation();
-  const { QpId, User } = location.state as ResultsScreenProps;
+  const { QpId, User, courseName } = location.state as ResultsScreenProps;
 
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>([]);
@@ -61,6 +62,15 @@ const UploadAnsScreen:React.FC = () => {
           uploadedPagesUrl:updatedImages
         }
         await updateDoc(doc(db, "Online-exam-results", QpId),{students:arrayUnion(obj)});
+
+        const studentDocRef = doc(db, "students", User.id);
+        const studentDocSnap = await getDoc(studentDocRef);
+
+
+        const studentData = studentDocSnap.data() as UserModel;
+        const courseIndex = studentData.registeredCourses.findIndex(course => course.courseName === courseName);
+        studentData.registeredCourses[courseIndex] = {...studentData.registeredCourses[courseIndex],onlineExamExempt:false};
+        await updateDoc(studentDocRef, { registeredCourses: studentData.registeredCourses });
         
         setImagePreviews([]);
         setSelectedFiles([]);
