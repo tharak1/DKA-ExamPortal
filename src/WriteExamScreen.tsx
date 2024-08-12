@@ -129,15 +129,14 @@ const WriteExamScreen: React.FC = () => {
       ) : (
         <div className="grid grid-cols-4 grid-rows-8 h-screen">
           {/* Navbar */}
-          <div className="col-span-4 row-span-1 bg-slate-50 shadow-md shadow-slate-200 z-10 flex items-center justify-between p-4 x-10">
-            <h1>{finalObj?.course}</h1>
-            <div className="flex justify-around items-center">
+          <div className="col-span-4 row-span-1 max-sm:row-span-1 max-sm:flex-col bg-slate-50 shadow-md shadow-slate-200 z-10 flex items-center justify-between p-4">
+            <h1 className='max-sm:hidden'>{finalObj?.course}</h1>
+            <div className="flex justify-around items-center"> 
               <h1 className="m-5">Duration: {finalObj?.duration} min</h1>
               <div className="mr-5">
               <Timer duration={parseInt(finalObj?.duration || '0') * 60}  onTimerFinish={handleTimerFinish}/>
-
               </div>
-              <div className="flex flex-col items-end mr-3">
+              <div className="flex flex-col items-end mr-3 max-sm:text-right">
                 <h1>{user?.name}</h1>
                 <p>id: {user?.id}</p>
               </div>
@@ -150,6 +149,9 @@ const WriteExamScreen: React.FC = () => {
               
               )
             }
+              <div className='flex justify-center items-center'>
+                
+              </div>
             </div>
 
           </div>
@@ -166,7 +168,7 @@ const WriteExamScreen: React.FC = () => {
             ):(
               <>
                     {/* Question Display */}
-                    <div className="p-8 w-full col-span-3 row-start-2 row-span-6 overflow-auto bg-white">
+                    <div className="p-8 w-full col-span-3 max-sm:col-span-4 row-start-2 row-span-6  overflow-auto bg-white">
                       {processedQuestions.length > 0 && (
                         <QuestionDisplay question={processedQuestions[questionIndex]} questionIndex={questionIndex} key={questionIndex} />
                       )}
@@ -174,7 +176,7 @@ const WriteExamScreen: React.FC = () => {
                     {/* Question Display */}
 
                     {/* Bottom Navigation */}
-                    <div className="col-span-3 row-span-1 row-start-8 bg-slate-100 flex justify-between p-6 items-center">
+                    <div className="col-span-3 max-sm:col-span-4 row-span-1 row-start-8  bg-slate-100 flex justify-between p-6 items-center">
                       <div className='flex'>
                         <button
                           onClick={handlePrevQuestion}
@@ -201,7 +203,7 @@ const WriteExamScreen: React.FC = () => {
                     {/* Bottom Navigation */}
 
                     {/* Side Navigation */}
-                    <div className="col-span-1 row-span-6 bg-slate-50 row-start-2 row-end-8 overflow-auto p-6">
+                    <div className="col-span-1 row-span-6 bg-slate-50 row-start-2 row-end-8 overflow-auto p-6 max-sm:hidden">
                       <label className="block mb-4 text-sm font-medium text-gray-900">Questions Status</label>
                       <div className="grid grid-cols-2 grid-rows-2 gap-y-4">
                         <div>
@@ -235,7 +237,7 @@ const WriteExamScreen: React.FC = () => {
                     {/* Side Navigation */}
 
                     {/* Submit Button */}
-                    <div className="bg-slate-50 col-span-1 row-span-1 row-start-8 flex justify-center items-center w-full">
+                    <div className="bg-slate-50 col-span-1 row-span-1 row-start-8 flex justify-center items-center w-full max-sm:hidden">
                       <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onClick={openModal}>
                         Submit
                       </button>
