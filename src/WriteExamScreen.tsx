@@ -175,7 +175,7 @@ const WriteExamScreen: React.FC = () => {
             ):(
               <>
                     {/* Question Display */}
-                    <div className={`p-8 w-full col-span-3 max-sm:col-span-4 row-start-2 row-span-5 max-sm:row-span-4  overflow-auto bg-white ${drawer?"max-sm:hidden":""}`} >
+                    <div className={`p-8 w-full col-span-3 max-sm:col-span-4 row-start-2 row-span-6 max-sm:row-span-5  overflow-auto bg-white ${drawer?"max-sm:hidden":""}`} >
                       {processedQuestions.length > 0 && (
                         <QuestionDisplay question={processedQuestions[questionIndex]} questionIndex={questionIndex} key={questionIndex} />
                       )}

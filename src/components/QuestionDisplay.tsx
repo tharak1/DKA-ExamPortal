@@ -69,7 +69,7 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({ questionIndex, questi
               type="number"
               value={numericAnswer || ''}
               onChange={handleNumericChange}
-              className="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+              className="form-input mt-1 block w-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
             />
           </div>
         ) : (
