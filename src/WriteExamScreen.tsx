@@ -27,7 +27,10 @@ const WriteExamScreen: React.FC = () => {
   const [answered, setAnswered] = useState<number>(0);
   const [modal, setModal] = useState<boolean>(false);
   const [user,setUser] = useState<UserModel>();
-  const openModal = () => setModal(true);
+  const openModal = () => {
+    handleSaveAndNextQuestion();
+    setModal(true)
+  };
   const closeModal = () => setModal(false);
 
   const [drawer,setDrawer] = useState<boolean>(false);
